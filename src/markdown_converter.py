@@ -99,7 +99,7 @@ class MarkdownConverter:
                 }
                 
                 readable_type = cardinality_map.get(relation_type, relation_type)
-                markdown.append(f"- **{source}** → **{target}** ({readable_type})")
+                markdown.append(f"- {source} → {target} ({readable_type})")
         
         markdown.append("")
         return '\n'.join(markdown)
