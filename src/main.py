@@ -50,7 +50,7 @@ def main():
         
         # 3. Generate ER diagram using Haskell ERD
         print("3. Generating ER diagram...")
-        erd_generator.generate_diagram(erd_file_path, output_dir / "schema.png")
+        erd_generator.generate_diagram(erd_file_path, output_dir / "schema.pdf")
         
         # 4. Convert ERD to Markdown
         print("4. Converting ERD to Markdown...")
@@ -60,7 +60,7 @@ def main():
         
         print(f"Success! Generated files:")
         print(f"  - ERD file: {erd_file_path}")
-        print(f"  - ER diagram: {output_dir / 'schema.png'}")
+        print(f"  - ER diagram: {output_dir / 'schema.pdf'}")
         print(f"  - Markdown: {markdown_path}")
         
     except Exception as e:

@@ -33,8 +33,13 @@ class GraphvizERDGenerator:
             dot.edge(source_table, target_table, label=label, 
                     arrowhead='crow', arrowtail='none')
         
-        # Render to PNG
-        dot.render(str(output_path.with_suffix('')), format='png', cleanup=True)
+        # Render to PDF
+        base_path = str(output_path.with_suffix(''))
+        print(f"Debug: output_path = {output_path}")
+        print(f"Debug: base_path = {base_path}")
+        print(f"Debug: Rendering with format='pdf'")
+        
+        dot.render(base_path, format='pdf', cleanup=True)
         print(f"ER diagram generated: {output_path}")
     
     def _generate_table_html(self, table_name: str, columns: List[Dict[str, Any]]) -> str:

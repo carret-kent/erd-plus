@@ -36,7 +36,7 @@ Person *--1 Location
 # Step
 1. MySQLデータベースから指定されたスキーマ情報を自動取得
 2. 取得したスキーマ情報から、label属性付きのerファイルを作成する
-3. erファイルから、HaskellのERDを実行し、png形式でER図を出力します
+3. erファイルから、HaskellのERDを実行し、pdf形式でER図を出力します
 4. erファイルをMarkdown形式に変換し出力します
 
 # Structure
@@ -46,7 +46,7 @@ Person *--1 Location
 - 取得したスキーマ情報から、Pythonスクリプトを使用してlabel属性付きの.erファイルを作成します。
 - label属性には、カラムの型(文字数制限)、unique制約、not null指定、コメントなどの詳細情報を含めます。
 3. ER図生成
-- HaskellのERDを使用して、.erファイルからER図を生成
+- HaskellのERDを使用して、.erファイルからPDF形式のER図を生成
 4. Markdown変換
 - Pythonスクリプトを使用して、.erファイルをMarkdown形式に変換します。
 
@@ -60,7 +60,7 @@ docker build -t erd-plus .
 ```bash
 docker run --rm -v $(pwd)/data:/data erd-plus
 ```
-4. `/data/output/`に生成されたER図とMarkdownファイルが出力されます
+4. `/data/output/`に生成されたER図（PDF）とMarkdownファイルが出力されます
 
 # Configuration
 `data/definition.json`には以下の情報を記載してください：

@@ -128,21 +128,24 @@ class ERDGenerator:
     
     def generate_diagram(self, erd_file_path: Path, output_image_path: Path) -> None:
         """Generate ER diagram using Haskell ERD tool or fallback to Graphviz"""
+        print(f"Debug: generate_diagram called with output_image_path = {output_image_path}")
         try:
             # Try Haskell ERD first
+            print("Debug: Attempting Haskell ERD...")
             self._generate_with_haskell_erd(erd_file_path, output_image_path)
         except Exception as e:
             print(f"Haskell ERD not available ({e}), using Graphviz fallback...")
+            print(f"Debug: Switching to Graphviz with path = {output_image_path}")
             self._generate_with_graphviz(output_image_path)
     
     def _generate_with_haskell_erd(self, erd_file_path: Path, output_image_path: Path) -> None:
         """Generate ER diagram using Haskell ERD tool"""
-        # Run erd command to generate PNG
+        # Run erd command to generate PDF
         cmd = [
             'erd',
             '-i', str(erd_file_path),
             '-o', str(output_image_path),
-            '-f', 'png'
+            '-f', 'pdf'
         ]
         
         result = subprocess.run(cmd, capture_output=True, text=True, check=True)
