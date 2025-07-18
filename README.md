@@ -81,14 +81,14 @@ make down           # Docker環境停止
 
 1. Docker環境を起動します：
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 2. データベース接続情報を`data/definition.json`に設定してください（`data/definition.json.example`を参考）
 
 3. ERD生成を実行します：
 ```bash
-docker-compose exec erd-plus python /app/src/main.py
+docker compose exec erd-plus python /app/src/main.py
 ```
 
 4. `/data/output/{database}/`に生成されたER図（PDF）とMarkdownファイルが出力されます

@@ -32,13 +32,13 @@ setup:
 		echo "✅ definition.json は既に存在します"; \
 	fi
 	@echo "🐳 Dockerイメージをビルドします..."
-	@docker-compose build
+	@docker compose build
 	@echo "✅ セットアップ完了！"
 
 # Docker環境起動
 up:
 	@echo "🐳 Docker環境を起動します..."
-	@docker-compose up -d
+	@docker compose up -d
 	@echo "⏳ MySQL起動を待機中..."
 	@sleep 10
 	@echo "✅ Docker環境が起動しました"
@@ -46,13 +46,13 @@ up:
 # Docker環境停止
 down:
 	@echo "🛑 Docker環境を停止します..."
-	@docker-compose down
+	@docker compose down
 	@echo "✅ Docker環境を停止しました"
 
 # ERD生成実行
 run:
 	@echo "🚀 ERD生成を開始します..."
-	@docker-compose exec erd-plus python /app/src/main.py
+	@docker compose exec erd-plus python /app/src/main.py
 	@echo "✅ ERD生成が完了しました！"
 	@echo "📁 生成物は data/output/ ディレクトリを確認してください"
 
@@ -64,7 +64,7 @@ all: up
 # データベース接続テスト
 test:
 	@echo "🔍 データベース接続テストを実行します..."
-	@docker-compose exec erd-plus python /app/src/test_simple.py
+	@docker compose exec erd-plus python /app/src/test_simple.py
 
 # クリーンアップ
 clean:
@@ -72,19 +72,19 @@ clean:
 	@echo "🗑️  生成物を削除中..."
 	@rm -rf data/output/*
 	@echo "🐳 Docker環境をクリーンアップ中..."
-	@docker-compose down --volumes --remove-orphans
+	@docker compose down --volumes --remove-orphans
 	@docker system prune -f
 	@echo "✅ クリーンアップが完了しました"
 
 # Dockerログ表示
 logs:
 	@echo "📋 Dockerコンテナのログを表示します..."
-	@docker-compose logs -f
+	@docker compose logs -f
 
 # Docker環境状態確認
 status:
 	@echo "📊 Docker環境の状態:"
-	@docker-compose ps
+	@docker compose ps
 	@echo ""
 	@echo "🗂️  生成物の状態:"
 	@if [ -d "data/output" ]; then \
@@ -104,13 +104,13 @@ example:
 # 開発用：ソースコード変更後の再起動
 restart:
 	@echo "🔄 ERD Plusコンテナを再起動します..."
-	@docker-compose restart erd-plus
+	@docker compose restart erd-plus
 	@echo "✅ 再起動完了"
 
 # 開発用：コンテナ内でbashを起動
 shell:
 	@echo "🖥️  ERD Plusコンテナに接続します..."
-	@docker-compose exec erd-plus bash
+	@docker compose exec erd-plus bash
 
 # 生成物の確認
 show:
