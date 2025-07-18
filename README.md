@@ -51,15 +51,46 @@ Person *--1 Location
 - Pythonスクリプトを使用して、.erファイルをMarkdown形式に変換します。
 
 # How to use
-1. Docker imgをビルドします。
+
+## 🚀 簡単実行（Makefileを使用）
+
+### 1. 初期セットアップ
 ```bash
-docker build -t erd-plus .
+make setup
 ```
-2. データベース接続情報とスキーマ情報を`/data/definition.json`に配置します。(/data/definition.jsonの例は、`data/definition.json.example`を参照してください)
-3. Dockerコンテナを起動します。
+この作業で`data/definition.json`が作成されるので、データベース接続情報を編集してください。
+
+### 2. ERD生成実行
 ```bash
-docker run --rm -v $(pwd)/data:/data erd-plus
+make all
 ```
+Docker起動からERD生成まで一括で実行されます。
+
+### 3. 使用可能なコマンド
+```bash
+make help          # コマンド一覧表示
+make up             # Docker環境起動
+make run            # ERD生成実行
+make test           # データベース接続テスト
+make status         # 環境状態確認
+make clean          # クリーンアップ
+make down           # Docker環境停止
+```
+
+## 🐳 Docker直接実行（従来方法）
+
+1. Docker環境を起動します：
+```bash
+docker-compose up -d
+```
+
+2. データベース接続情報を`data/definition.json`に設定してください（`data/definition.json.example`を参考）
+
+3. ERD生成を実行します：
+```bash
+docker-compose exec erd-plus python /app/src/main.py
+```
+
 4. `/data/output/{database}/`に生成されたER図（PDF）とMarkdownファイルが出力されます
 
 ## Output Format
