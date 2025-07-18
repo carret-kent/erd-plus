@@ -58,7 +58,7 @@ Person *--1 Location
 ```bash
 make setup
 ```
-この作業で`data/definition.json`が作成されるので、データベース接続情報を編集してください。
+この作業で`src/.env`が作成されるので、データベース接続情報を編集してください。
 
 ### 2. ERD生成実行
 ```bash
@@ -84,7 +84,7 @@ make down           # Docker環境停止
 docker compose up -d
 ```
 
-2. データベース接続情報を`data/definition.json`に設定してください（`data/definition.json.example`を参考）
+2. データベース接続情報を`src/.env`に設定してください（`src/.env.example`を参考）
 
 3. ERD生成を実行します：
 ```bash
@@ -114,16 +114,25 @@ data/output/
 ```
 
 # Configuration
-`data/definition.json`には以下の情報を記載してください：
-```json
-{
-  "host": "localhost",
-  "port": 3306,
-  "database": "your_database_name",
-  "username": "your_username",
-  "password": "your_password",
-  "schema": "your_schema_name"
-}
+`src/.env`には以下の情報を記載してください：
+```env
+# Database host (use host.docker.internal for Docker environment)
+DB_HOST=localhost
+
+# Database port  
+DB_PORT=3306
+
+# Database name
+DB_DATABASE=your_database_name
+
+# Database username
+DB_USERNAME=your_username
+
+# Database password
+DB_PASSWORD=your_password
+
+# Target schema name (usually same as database name)
+DB_SCHEMA=your_schema_name
 ```
 
 # Label Attribute Format

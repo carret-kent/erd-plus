@@ -6,25 +6,43 @@ Main entry point for the application
 
 import os
 import sys
-import json
 from pathlib import Path
+from dotenv import load_dotenv
 from db_connector import MySQLSchemaExtractor
 from erd_generator import ERDGenerator
 from markdown_converter import MarkdownConverter
 from test_simple import test_mysql_connection
 
-def load_config(config_path="/data/definition.json"):
-    """Load database configuration from JSON file"""
-    try:
-        with open(config_path, 'r') as f:
-            config = json.load(f)
-        return config
-    except FileNotFoundError:
-        print(f"Error: Configuration file {config_path} not found")
+def load_config():
+    """Load database configuration from .env file"""
+    # Load .env file from the same directory as this script
+    env_path = Path(__file__).parent / '.env'
+    
+    if not env_path.exists():
+        print(f"Error: Configuration file {env_path} not found")
+        print("Please copy .env.example to .env and configure your database settings")
         sys.exit(1)
-    except json.JSONDecodeError:
-        print(f"Error: Invalid JSON in {config_path}")
+    
+    load_dotenv(env_path)
+    
+    config = {
+        'host': os.getenv('DB_HOST'),
+        'port': int(os.getenv('DB_PORT', '3306')),
+        'database': os.getenv('DB_DATABASE'),
+        'username': os.getenv('DB_USERNAME'),
+        'password': os.getenv('DB_PASSWORD', ''),
+        'schema': os.getenv('DB_SCHEMA')
+    }
+    
+    # Validate required fields
+    required_fields = ['host', 'database', 'username', 'schema']
+    missing_fields = [field for field in required_fields if not config[field]]
+    
+    if missing_fields:
+        print(f"Error: Missing required configuration fields in .env: {', '.join(missing_fields)}")
         sys.exit(1)
+    
+    return config
 
 def main():
     """Main application logic"""

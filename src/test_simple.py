@@ -3,22 +3,32 @@
 Connection test utility for MySQL database
 """
 
-import json
 import sys
 import os
+from pathlib import Path
+from dotenv import load_dotenv
 
-def load_config(config_path="/data/definition.json"):
-    """Load database configuration from JSON file"""
-    try:
-        with open(config_path, 'r') as f:
-            config = json.load(f)
-        return config
-    except FileNotFoundError:
-        print(f"Error: Configuration file {config_path} not found")
+def load_config():
+    """Load database configuration from .env file"""
+    # Load .env file from the same directory as this script
+    env_path = Path(__file__).parent / '.env'
+    
+    if not env_path.exists():
+        print(f"Error: Configuration file {env_path} not found")
         return None
-    except json.JSONDecodeError:
-        print(f"Error: Invalid JSON in {config_path}")
-        return None
+    
+    load_dotenv(env_path)
+    
+    config = {
+        'host': os.getenv('DB_HOST'),
+        'port': int(os.getenv('DB_PORT', '3306')),
+        'database': os.getenv('DB_DATABASE'),
+        'username': os.getenv('DB_USERNAME'),
+        'password': os.getenv('DB_PASSWORD', ''),
+        'schema': os.getenv('DB_SCHEMA')
+    }
+    
+    return config
 
 def test_mysql_connection(config=None, verbose=False):
     """

@@ -7,11 +7,28 @@ Connects to MySQL database and extracts table schema information
 import mysql.connector
 from mysql.connector import Error
 from typing import Dict, List, Any
+import os
+from dotenv import load_dotenv
+from pathlib import Path
 
 class MySQLSchemaExtractor:
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: Dict[str, Any] = None):
         """Initialize with database configuration"""
-        self.config = config
+        if config is None:
+            # Load configuration from .env file
+            env_path = Path(__file__).parent / '.env'
+            load_dotenv(env_path)
+            
+            self.config = {
+                'host': os.getenv('DB_HOST', 'localhost'),
+                'port': int(os.getenv('DB_PORT', '3306')),
+                'database': os.getenv('DB_DATABASE', ''),
+                'username': os.getenv('DB_USERNAME', ''),
+                'password': os.getenv('DB_PASSWORD', ''),
+                'schema': os.getenv('DB_SCHEMA', os.getenv('DB_DATABASE', ''))
+            }
+        else:
+            self.config = config
         self.connection = None
         
     def connect(self):

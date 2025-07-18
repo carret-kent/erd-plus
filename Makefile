@@ -23,13 +23,13 @@ help:
 # 初期セットアップ
 setup:
 	@echo "🔧 ERD Plus 初期セットアップ"
-	@if [ ! -f data/definition.json ]; then \
-		echo "📝 definition.jsonを作成します..."; \
-		cp data/definition.json.example data/definition.json; \
-		echo "✅ data/definition.json を作成しました"; \
+	@if [ ! -f src/.env ]; then \
+		echo "📝 .envファイルを作成します..."; \
+		cp src/.env.example src/.env; \
+		echo "✅ src/.env を作成しました"; \
 		echo "⚠️  データベース接続情報を編集してください"; \
 	else \
-		echo "✅ definition.json は既に存在します"; \
+		echo "✅ .env は既に存在します"; \
 	fi
 	@echo "🐳 Dockerイメージをビルドします..."
 	@docker compose build
@@ -95,11 +95,11 @@ status:
 
 # サンプル設定表示
 example:
-	@echo "📋 definition.json サンプル設定:"
+	@echo "📋 .env サンプル設定:"
 	@echo ""
-	@cat data/definition.json.example
+	@cat src/.env.example
 	@echo ""
-	@echo "💡 この設定を data/definition.json にコピーして編集してください"
+	@echo "💡 この設定を src/.env にコピーして編集してください"
 
 # 開発用：ソースコード変更後の再起動
 restart:
