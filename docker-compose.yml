@@ -18,12 +18,13 @@ services:
   erd-plus:
     build:
       context: .
-      dockerfile: Dockerfile.test
+      dockerfile: Dockerfile
     depends_on:
       mysql:
         condition: service_healthy
     volumes:
       - ./data:/data
+      - ./src:/app/src
     environment:
       - MYSQL_HOST=mysql
       - MYSQL_PASSWORD=testpassword

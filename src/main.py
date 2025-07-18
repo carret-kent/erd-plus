@@ -11,6 +11,7 @@ from pathlib import Path
 from db_connector import MySQLSchemaExtractor
 from erd_generator import ERDGenerator
 from markdown_converter import MarkdownConverter
+from test_simple import test_mysql_connection
 
 def load_config(config_path="/data/definition.json"):
     """Load database configuration from JSON file"""
@@ -32,9 +33,19 @@ def main():
     # Load configuration
     config = load_config()
     
-    # Create output directory
-    output_dir = Path("/data/output")
-    output_dir.mkdir(exist_ok=True)
+    # 0. Test database connection first
+    print("0. Testing database connection...")
+    if not test_mysql_connection(config, verbose=True):
+        print("❌ Database connection test failed. Please check your configuration.")
+        sys.exit(1)
+    print("✅ Database connection test passed!\n")
+    
+    # Create output directory structure: /data/output/{database}/
+    database_name = config['database']
+    schema_name = config['schema']
+    output_base_dir = Path("/data/output")
+    output_dir = output_base_dir / database_name
+    output_dir.mkdir(parents=True, exist_ok=True)
     
     try:
         # 1. Extract schema from MySQL database
@@ -45,22 +56,23 @@ def main():
         # 2. Generate ERD file
         print("2. Generating ERD file...")
         erd_generator = ERDGenerator(schema_data)
-        erd_file_path = output_dir / "schema.er"
+        erd_file_path = output_dir / f"{schema_name}.er"
         erd_generator.generate_erd_file(erd_file_path)
         
         # 3. Generate ER diagram using Haskell ERD
         print("3. Generating ER diagram...")
-        erd_generator.generate_diagram(erd_file_path, output_dir / "schema.pdf")
+        pdf_path = output_dir / f"{schema_name}.pdf"
+        erd_generator.generate_diagram(erd_file_path, pdf_path)
         
         # 4. Convert ERD to Markdown
         print("4. Converting ERD to Markdown...")
         converter = MarkdownConverter()
-        markdown_path = output_dir / "schema.md"
+        markdown_path = output_dir / f"{schema_name}.md"
         converter.convert_erd_to_markdown(erd_file_path, markdown_path)
         
-        print(f"Success! Generated files:")
+        print(f"Success! Generated files in {output_dir}:")
         print(f"  - ERD file: {erd_file_path}")
-        print(f"  - ER diagram: {output_dir / 'schema.pdf'}")
+        print(f"  - ER diagram: {pdf_path}")
         print(f"  - Markdown: {markdown_path}")
         
     except Exception as e:

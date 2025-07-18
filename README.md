@@ -60,7 +60,27 @@ docker build -t erd-plus .
 ```bash
 docker run --rm -v $(pwd)/data:/data erd-plus
 ```
-4. `/data/output/`に生成されたER図（PDF）とMarkdownファイルが出力されます
+4. `/data/output/{database}/`に生成されたER図（PDF）とMarkdownファイルが出力されます
+
+## Output Format
+生成されるファイルは以下の階層構造で出力されます：
+
+```
+data/output/
+└── {database}/
+    ├── {schema}.er     # ERDファイル
+    ├── {schema}.md     # Markdownドキュメント
+    └── {schema}.pdf    # ER図（PDF形式）
+```
+
+例：データベース名が`chatbot`、スキーマ名が`chatbot`の場合
+```
+data/output/
+└── chatbot/
+    ├── chatbot.er
+    ├── chatbot.md
+    └── chatbot.pdf
+```
 
 # Configuration
 `data/definition.json`には以下の情報を記載してください：
